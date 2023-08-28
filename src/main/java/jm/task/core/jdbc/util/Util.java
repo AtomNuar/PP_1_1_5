@@ -18,6 +18,7 @@ public class Util {
     private static final String URL = "jdbc:mysql://localhost:3306/userbd?autoReconnect=true&useSSL=false";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "FenderGibson2020!";
+    private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
 
     private static SessionFactory sessionFactory;
 
@@ -28,7 +29,7 @@ public class Util {
 
                 // Hibernate settings equivalent to hibernate.cfg.xml's properties
                 Properties settings = new Properties();
-                settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
+                settings.put(Environment.DRIVER, DRIVER);
                 settings.put(Environment.URL, URL);
                 settings.put(Environment.USER, USERNAME);
                 settings.put(Environment.PASS, PASSWORD);
@@ -48,9 +49,7 @@ public class Util {
                         .applySettings(configuration.getProperties()).build();
 
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-                System.out.println("Подсключение установлено");
             } catch (Exception e) {
-                System.out.println("Ошибка в подключении");
                 e.printStackTrace();
             }
         }
@@ -69,3 +68,4 @@ public class Util {
         return connection;
     }
 }
+
