@@ -7,7 +7,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -59,7 +58,7 @@ public class UserDaoHibernateImpl implements UserDao {
             transaction = session.beginTransaction();
             User user = new User(name, lastName, age);
             session.save(user);
-            transaction.commit();
+            session.getTransaction().commit();
             System.out.println("User с именем Ц " + name + " добавлен в базу данных");
         } catch (Exception e) {
             if (transaction != null) {
@@ -86,29 +85,17 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        List<User> us = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            List<User> users = session.createQuery("from User", User.class)
-                    .getResultList();
-            transaction.commit();
-            return users;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
+            return session.createQuery("from User", User.class).list();
         }
-        return us;
     }
 
 
     @Override
     public void cleanUsersTable() {
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.getCurrentSession()) {
             transaction = session.beginTransaction();
-            String hql = String.format("delete from %s", "users");
-            Query query = session.createQuery(hql);
-            query.executeUpdate();
+            session.createQuery("delete User").executeUpdate();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {

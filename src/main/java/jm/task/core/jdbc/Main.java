@@ -1,5 +1,6 @@
 package jm.task.core.jdbc;
 
+import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
 
@@ -9,16 +10,18 @@ public class Main {
 
     public static void main(String[] args) {
 
-        userService.createUsersTable();
+        User one = new User("Роман","Шатилов",(byte)31);
+        User two = new User("Кристина","Шатилова",(byte)28);
+        User three = new User("Вероника","Шатилова",(byte)6);
 
-        userService.saveUser("Роман", "Шатилов", (byte) 31);
-        userService.saveUser("Кристина", "Шатилова", (byte) 28);
-        userService.saveUser("Вероника", "Шатилова", (byte) 6);
+        userService.saveUser(one.getName(), one.getLastName(), one.getAge());
+        userService.saveUser(two.getName(), two.getLastName(), two.getAge());
+        userService.saveUser(three.getName(), three.getLastName(), three.getAge());
+
+        userService.removeUserById(2);
 
         userService.getAllUsers();
 
         userService.cleanUsersTable();
-
-        userService.dropUsersTable();
     }
 }
